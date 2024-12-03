@@ -1,0 +1,11 @@
+<div class="form-con">
+  <form class="login-signup-form" ngNativeValidate (submit)="Signup_data_store()">
+    <div class="form-heading"><h1>{{Signup ? 'Signup' : 'Login'}}</h1></div>
+    <input type="text" placeholder="Username" minlength="4" name="Username" [(ngModel)]="Signup_data.Username" *ngIf="Signup">
+    <input type="email" placeholder="Email" required name="email" [(ngModel)]="Signup_data.Email">
+    <input type="password" placeholder="Password" minlength="5" required name="password" [(ngModel)]="Signup_data.Password">
+    <button type="submit">Submit</button>
+    <div><a (click)="Switch_form()" style="cursor: pointer;">{{Signup ? 'Already have an account? Login' : 'Dont have an account? signup'}}</a></div>
+  </form>
+</div>
+<router-outlet></router-outlet>
