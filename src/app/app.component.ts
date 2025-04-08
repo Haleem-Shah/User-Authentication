@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-
+import { userDetails } from './user-module/user.module';
 
 @Component({
   selector: 'app-root',
@@ -11,61 +11,75 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  Signup_data: any =  {
-    Username: "",
-    Email: "",
-    Password: "",
-    Role:"Admin"
+  userDetails:userDetails =  {
+    userName: "",
+    email: "",
+    password: "",
   } 
-  Login:boolean = true;
-  Signup:boolean = false;
-  stored_value : any;
-  Signup_user_data: any [] = [];
-  Check_Signup_user_data: any [] = [];
-  Switch_form(){
-    this.Login = !this.Login;
-    this.Signup = !this.Signup;
+  login:boolean = true;
+  signup:boolean = false;
+  checkUser:any;
+  localUserData:userDetails [] = [];
+  constructor(){
+    localStorage.clear();
+  }
+  ngOnInit(){
+  
+   }
+  switchForm(){
+    this.login = !this.login;
+    this.signup = !this.signup;
+    this.userDetails =  {
+      userName: "",
+      email: "",
+      password: "",
+    }
   } 
- If_user_exists(){
-     const check_local_data = localStorage.getItem("Signup_user_data");
-     if(check_local_data){
-      this.Check_Signup_user_data = JSON.parse(check_local_data);
-      this.stored_value = this.Check_Signup_user_data.find((cld) => cld.Email == this.Signup_data.Email || cld.Password == this.Signup_data.Password);
+ ifUserExists(){
+     const checkLocalData = localStorage.getItem("Local-User-Data");
+     if(checkLocalData){
+      this.localUserData = JSON.parse(checkLocalData);
+      this.checkUser = this.localUserData.find((cld) => cld.email == this.userDetails.email || cld.password == this.userDetails.password);
     }
      
    }
 
-   ngOnInit(){
-    const local_data_null_check = localStorage.getItem("Signup_user_data");
-    if(local_data_null_check != null){
-      this.Signup_user_data = JSON.parse(local_data_null_check);
-    }
-
-   }
-
-  Signup_data_store(){
-  this.If_user_exists();
-  const local_data = localStorage.getItem("Signup_user_data");
-  if(this.Signup && this.stored_value == undefined){
-    this.Signup_user_data.push(this.Signup_data);
-    localStorage.setItem("Signup_user_data", JSON.stringify(this.Signup_user_data));
-    this.Signup_data =  {
-     Username: "",
-     Email: "",
-     Password: "",
-     Role:"Admin"
-   } 
+  registerUser(){
+  this.ifUserExists();
+  if(this.checkUser == undefined){
+    this.localUserData.push(this.userDetails);
+    localStorage.setItem("Local-User-Data", JSON.stringify(this.localUserData));
+    alert("Registration Successfull");
+    this.userDetails =  {
+      userName: "",
+      email: "",
+      password: "",
+    } 
    
   }
-  else if(local_data && this.Login){
-    this.Signup_user_data = JSON.parse(local_data);
-    const user_found = this.Signup_user_data.find(ld => ld.Email == this.Signup_data.Email && ld.Password == this.Signup_data.Password); 
-    if(user_found != undefined){
-      alert("Login");
-    }
-    else{alert("user not found")}; 
-    }
-    else{alert( 'Email or Password already in use')};
+    else{alert( 'Email or Password already in use');console.log(this.checkUser)};
+  }
+  loginUser(){
+   
+    const localData = localStorage.getItem("Local-User-Data");
+    if(localData){
+      this.localUserData = JSON.parse(localData);
+      const userFound = this.localUserData.find(ld => ld.email == this.userDetails.email && ld.password == this.userDetails.password); 
+      if(userFound != undefined){
+        alert("Login Successfull");
+        this.userDetails =  {
+          userName: "",
+          email: "",
+          password: "",
+        }
+      }
+      else{alert("User not found");
+       
+      }; 
+      }
+      else{
+        alert("User not found");
+      }
   }
 
 

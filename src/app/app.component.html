@@ -1,11 +1,21 @@
-<div class="form-con">
-  <form class="login-signup-form" ngNativeValidate (submit)="Signup_data_store()">
-    <div class="form-heading"><h1>{{Signup ? 'Signup' : 'Login'}}</h1></div>
-    <input type="text" placeholder="Username" minlength="4" name="Username" [(ngModel)]="Signup_data.Username" *ngIf="Signup">
-    <input type="email" placeholder="Email" required name="email" [(ngModel)]="Signup_data.Email">
-    <input type="password" placeholder="Password" minlength="5" required name="password" [(ngModel)]="Signup_data.Password">
+<div class="form-con" *ngIf="login">
+  <form class="login-signup-form" ngNativeValidate (submit)="loginUser()">
+    <div class="form-heading"><h1>Login</h1></div>
+    <input type="text" placeholder="Username" minlength="4" name="Username" [(ngModel)]="userDetails.userName" *ngIf="signup">
+    <input type="email" placeholder="Email" required name="email" [(ngModel)]="userDetails.email">
+    <input type="password" placeholder="Password" minlength="5" required name="password" [(ngModel)]="userDetails.password">
     <button type="submit">Submit</button>
-    <div><a (click)="Switch_form()" style="cursor: pointer;">{{Signup ? 'Already have an account? Login' : 'Dont have an account? signup'}}</a></div>
+    <div><a (click)="switchForm()" style="cursor: pointer;">Dont have an account? signup</a></div>
+  </form>
+</div>
+<div class="form-con" *ngIf="signup">
+  <form class="login-signup-form" ngNativeValidate (submit)="registerUser()">
+    <div class="form-heading"><h1>Signup</h1></div>
+    <input type="text" placeholder="Username" minlength="4" name="Username" [(ngModel)]="userDetails.userName">
+    <input type="email" placeholder="Email" required name="email" [(ngModel)]="userDetails.email">
+    <input type="password" placeholder="Password" minlength="5" required name="password" [(ngModel)]="userDetails.password">
+    <button type="submit" *ngIf="signup">Submit</button>
+    <div><a (click)="switchForm()" style="cursor: pointer;">Already have an account? Login</a></div>
   </form>
 </div>
 <router-outlet></router-outlet>
